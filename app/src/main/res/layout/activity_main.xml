@@ -8,10 +8,11 @@
 
 
     <lyd.github.library.TurnLoadView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="200dp"
+        android:layout_centerInParent="true"
+        android:layout_height="200dp"
         turn:maxRange="300"
-        turn:backgroundColor="#000000"
-        turn:strokeWidth="20" />
+        turn:strokeWidth="20"
+        turn:turnColorList="#F44336,#9C27B0,#3F51B5,#03A9F4,#00BCD4,#4CAF50,#FFEB3B,#FF9800,#795548,#607D8B" />
 
 </RelativeLayout>
