@@ -32,7 +32,6 @@ public class Turn {
     private TurnAttrs turnAttrs;
 
     public Turn(TurnAttrs turnAttrs, float radius, int color, boolean isStartTop) {
-        Log.e("lyd", " Turn " + radius);
         this.turnAttrs = turnAttrs;
         this.radius = radius;
         this.isStartTop = isStartTop;
@@ -82,14 +81,11 @@ public class Turn {
             if (radius <= 1) {
                 radius = (centerX >= centerY ? centerY : centerX) * radius - turnAttrs.strokeWidth / 2;
             }
-            Log.e("lyd", " initRectF " + radius);
             rectF = new RectF();
             rectF.left = centerX - radius;
             rectF.top = centerY - radius;
             rectF.right = centerX + radius;
             rectF.bottom = centerY + radius;
-
-            Log.e("lyd", " rectF " + rectF.toString());
         }
     }
 }
