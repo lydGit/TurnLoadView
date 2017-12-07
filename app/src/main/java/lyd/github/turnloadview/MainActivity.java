@@ -24,5 +24,6 @@ public class MainActivity extends AppCompatActivity {
         tlvLoad.setTurnColorList(ContextCompat.getColor(this, R.color.colorBlue), ContextCompat.getColor(this, R.color.colorTeal));
 
         tlvLoad.addTurn(0, new Turn(30, ContextCompat.getColor(this, R.color.colorDeepPurple), true));
+
     }
 }
