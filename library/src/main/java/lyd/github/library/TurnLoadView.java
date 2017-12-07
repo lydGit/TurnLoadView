@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +27,12 @@ public class TurnLoadView extends SurfaceView implements SurfaceHolder.Callback 
      * 控件背景
      */
     private int backgroundColor = Color.TRANSPARENT;
+    /**
+     * 圆环颜色
+     */
+    private String turnColorStr = "#FF5722,#FFC107";
+
+    private List<Turn> turnList;
 
     public TurnLoadView(Context context) {
         this(context, null);
@@ -38,6 +46,7 @@ public class TurnLoadView extends SurfaceView implements SurfaceHolder.Callback 
         super(context, attrs, defStyleAttr);
         initAttrs(attrs);
         initView();
+        initTurn();
     }
 
     /**
@@ -53,6 +62,8 @@ public class TurnLoadView extends SurfaceView implements SurfaceHolder.Callback 
         turnAttrs.strokeWidth = typedArray.getFloat(R.styleable.TurnLoad_strokeWidth, turnAttrs.strokeWidth);
         turnAttrs.speed = typedArray.getInteger(R.styleable.TurnLoad_speed, turnAttrs.speed);
         backgroundColor = typedArray.getColor(R.styleable.TurnLoad_backgroundColor, backgroundColor);
+        String colorStr = typedArray.getString(R.styleable.TurnLoad_turnColorList);
+        turnColorStr = TextUtils.isEmpty(colorStr) ? turnColorStr : colorStr;
         typedArray.recycle();
     }
 
@@ -64,13 +75,23 @@ public class TurnLoadView extends SurfaceView implements SurfaceHolder.Callback 
         this.getHolder().setFormat(PixelFormat.TRANSLUCENT);
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
+
     }
 
+    private void initTurn() {
+        turnList = new ArrayList<>();
+        String[] colorStrs = turnColorStr.split(",");
+        boolean isStartTop = true;
+        for (int i = 0; i < colorStrs.length; i++) {
+            turnList.add(new Turn(turnAttrs, (i + 1) / (float)colorStrs.length, Color.parseColor(colorStrs[i]), isStartTop));
+            isStartTop = !isStartTop;
+        }
+    }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         if (loadThread == null) {
-            loadThread = new TurnLoadThread(turnAttrs, holder, backgroundColor);
+            loadThread = new TurnLoadThread(turnAttrs, holder, turnList, backgroundColor);
         }
         loadThread.isRunning = true;
         loadThread.start();
@@ -96,7 +117,7 @@ public class TurnLoadView extends SurfaceView implements SurfaceHolder.Callback 
      * 清空所有
      */
     public void cleanAllTurn() {
-        loadThread.cleanAllTurn();
+        turnList.clear();
     }
 
     /**
@@ -105,7 +126,7 @@ public class TurnLoadView extends SurfaceView implements SurfaceHolder.Callback 
      * @param turn
      */
     public void addTurn(Turn turn) {
-        loadThread.addTurn(turn);
+        turnList.add(turn);
     }
 
     /**
@@ -114,6 +135,6 @@ public class TurnLoadView extends SurfaceView implements SurfaceHolder.Callback 
      * @return
      */
     public List<Turn> getTurnList() {
-        return loadThread.getTurnList();
+        return turnList;
     }
 }

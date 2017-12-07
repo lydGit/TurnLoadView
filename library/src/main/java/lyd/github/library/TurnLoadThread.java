@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.view.SurfaceHolder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,12 +39,12 @@ public class TurnLoadThread extends Thread {
      */
     private int backgroundColor;
 
-    public TurnLoadThread(TurnAttrs turnAttrs, SurfaceHolder holder, int backgroundColor) {
+    public TurnLoadThread(TurnAttrs turnAttrs, SurfaceHolder holder, List<Turn> turnList, int backgroundColor) {
         this.turnAttrs = turnAttrs;
         this.holder = holder;
+        this.turnList = turnList;
         this.backgroundColor = backgroundColor;
         allFrame = (360 + turnAttrs.maxRange) / 10;
-        turnList = new ArrayList<>();
     }
 
     @Override
@@ -85,30 +84,4 @@ public class TurnLoadThread extends Thread {
             turnList.get(i).draw(canvas, frame % allFrame * 10 + 10);
         }
     }
-
-    /**
-     * 清空所有
-     */
-    public void cleanAllTurn() {
-        turnList.clear();
-    }
-
-    /**
-     * 添加
-     *
-     * @param turn
-     */
-    public void addTurn(Turn turn) {
-        turnList.add(turn);
-    }
-
-    /**
-     * 获取列表
-     *
-     * @return
-     */
-    public List<Turn> getTurnList() {
-        return turnList;
-    }
-
 }

@@ -3,6 +3,7 @@ package lyd.github.library;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.util.Log;
 
 /**
  * Created by shawn on 17/11/29.
@@ -14,26 +15,27 @@ public class Turn {
      * 绘制范围
      */
     private RectF rectF;
+
+    private Paint paint;
+
     /**
      * 半径
      */
     private float radius;
     /**
-     * true 顺时针 false逆时针
+     * true 从顶部开始旋转 false 从顶部开始旋转
      */
-    private boolean isClockwise;
-
-    private Paint paint;
-
+    private boolean isStartTop;
     /**
      * 控件属性
      */
     private TurnAttrs turnAttrs;
 
-    public Turn(TurnAttrs turnAttrs, float radius, int color, boolean isClockwise) {
+    public Turn(TurnAttrs turnAttrs, float radius, int color, boolean isStartTop) {
+        Log.e("lyd", " Turn " + radius);
         this.turnAttrs = turnAttrs;
         this.radius = radius;
-        this.isClockwise = isClockwise;
+        this.isStartTop = isStartTop;
         paint = new Paint();
         paint.setColor(color);
         paint.setStyle(Paint.Style.STROKE);
@@ -43,7 +45,7 @@ public class Turn {
 
     public void draw(Canvas canvas, float angle) {
         initRectF(canvas);
-        if (isClockwise) {
+        if (isStartTop) {
             if (angle >= turnAttrs.maxRange + 360) {
 
             } else if (angle > 360) {
@@ -76,11 +78,18 @@ public class Turn {
         if (rectF == null) {
             int centerX = canvas.getWidth() / 2;
             int centerY = canvas.getHeight() / 2;
+            //当radius<=1时，radius是按最短边的百分比来计算半径
+            if (radius <= 1) {
+                radius = (centerX >= centerY ? centerY : centerX) * radius - turnAttrs.strokeWidth / 2;
+            }
+            Log.e("lyd", " initRectF " + radius);
             rectF = new RectF();
             rectF.left = centerX - radius;
             rectF.top = centerY - radius;
             rectF.right = centerX + radius;
             rectF.bottom = centerY + radius;
+
+            Log.e("lyd", " rectF " + rectF.toString());
         }
     }
 }
