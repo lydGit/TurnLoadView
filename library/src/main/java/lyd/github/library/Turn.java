@@ -30,18 +30,17 @@ public class Turn {
      */
     private TurnAttrs turnAttrs;
 
-    public Turn(TurnAttrs turnAttrs, float radius, int color, boolean isStartTop) {
-        this.turnAttrs = turnAttrs;
+    public Turn(float radius, int color, boolean isStartTop) {
         this.radius = radius;
         this.isStartTop = isStartTop;
         paint = new Paint();
         paint.setColor(color);
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(turnAttrs.strokeWidth);
         paint.setAntiAlias(true);
     }
 
-    public void draw(Canvas canvas, float angle) {
+    public void draw(TurnAttrs turnAttrs, Canvas canvas, float angle) {
+        initAttrs(turnAttrs);
         initRectF(canvas);
         if (isStartTop) {
             if (angle >= turnAttrs.maxRange + 360) {
@@ -64,6 +63,16 @@ public class Turn {
                 canvas.drawArc(rectF, 0, angle, false, paint);
             }
         }
+    }
+
+    /**
+     * 初始属性
+     *
+     * @param turnAttrs
+     */
+    private void initAttrs(TurnAttrs turnAttrs) {
+        this.turnAttrs = turnAttrs;
+        paint.setStrokeWidth(turnAttrs.strokeWidth);
     }
 
     /**

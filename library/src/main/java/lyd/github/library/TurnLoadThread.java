@@ -81,7 +81,7 @@ public class TurnLoadThread extends Thread {
             canvas.drawColor(backgroundColor);
         }
         for (int i = 0; i < turnList.size(); i++) {
-            turnList.get(i).draw(canvas, frame % allFrame * 10 + 10);
+            turnList.get(i).draw(turnAttrs, canvas, frame % allFrame * 10 + 10);
         }
     }
 }

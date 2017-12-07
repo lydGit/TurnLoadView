@@ -30,7 +30,7 @@ public class TurnLoadView extends SurfaceView implements SurfaceHolder.Callback 
     /**
      * 圆环颜色
      */
-    private String turnColorStr = "#FF5722,#FFC107";
+    private String turnColorStr;
 
     private List<Turn> turnList;
 
@@ -62,8 +62,7 @@ public class TurnLoadView extends SurfaceView implements SurfaceHolder.Callback 
         turnAttrs.strokeWidth = typedArray.getFloat(R.styleable.TurnLoad_strokeWidth, turnAttrs.strokeWidth);
         turnAttrs.speed = typedArray.getInteger(R.styleable.TurnLoad_speed, turnAttrs.speed);
         backgroundColor = typedArray.getColor(R.styleable.TurnLoad_backgroundColor, backgroundColor);
-        String colorStr = typedArray.getString(R.styleable.TurnLoad_turnColorList);
-        turnColorStr = TextUtils.isEmpty(colorStr) ? turnColorStr : colorStr;
+        turnColorStr = typedArray.getString(R.styleable.TurnLoad_turnColorList);
         typedArray.recycle();
     }
 
@@ -80,10 +79,13 @@ public class TurnLoadView extends SurfaceView implements SurfaceHolder.Callback 
 
     private void initTurn() {
         turnList = new ArrayList<>();
+        if (TextUtils.isEmpty(turnColorStr)) {
+            return;
+        }
         String[] colorStrs = turnColorStr.split(",");
         boolean isStartTop = true;
         for (int i = 0; i < colorStrs.length; i++) {
-            turnList.add(new Turn(turnAttrs, (i + 1) / (float)colorStrs.length, Color.parseColor(colorStrs[i]), isStartTop));
+            turnList.add(new Turn((i + 1) / (float) colorStrs.length, Color.parseColor(colorStrs[i]), isStartTop));
             isStartTop = !isStartTop;
         }
     }
@@ -130,11 +132,69 @@ public class TurnLoadView extends SurfaceView implements SurfaceHolder.Callback 
     }
 
     /**
+     * 添加
+     *
+     * @param turn
+     */
+    public void addTurn(int index, Turn turn) {
+        turnList.add(index, turn);
+    }
+
+    /**
      * 获取列表
      *
      * @return
      */
     public List<Turn> getTurnList() {
         return turnList;
+    }
+
+    /**
+     * 设置圆环最大的幅度
+     *
+     * @param maxRange
+     */
+    public void setMaxRange(int maxRange) {
+        this.turnAttrs.maxRange = maxRange;
+    }
+
+    /**
+     * 设置圆环宽度
+     *
+     * @param strokeWidth
+     */
+    public void setStrokeWidth(float strokeWidth) {
+        this.turnAttrs.strokeWidth = strokeWidth;
+    }
+
+    /**
+     * 设置速度
+     *
+     * @param speed
+     */
+    public void setSpeed(int speed) {
+        this.turnAttrs.speed = speed;
+    }
+
+    /**
+     * 设置背景色
+     *
+     * @param color
+     */
+    public void setBackgroundColor(int color) {
+        this.backgroundColor = color;
+    }
+
+    /**
+     * 设置圆环颜色
+     *
+     * @param colors
+     */
+    public void setTurnColorList(int... colors) {
+        boolean isStartTop = true;
+        for (int i = 0; i < colors.length; i++) {
+            turnList.add(new Turn((i + 1) / (float) colors.length, colors[i], isStartTop));
+            isStartTop = !isStartTop;
+        }
     }
 }
