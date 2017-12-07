@@ -1,6 +1,6 @@
 # TurnLoadView
 模仿58的旋转加载动画
-没有经过大厂的洗礼，代码不太规范！
+(没有经过大厂的洗礼，代码不太规范！欢迎批评)
 
 ![image](https://github.com/lydGit/TurnLoadView/blob/master/screenshots/run.gif)
 
