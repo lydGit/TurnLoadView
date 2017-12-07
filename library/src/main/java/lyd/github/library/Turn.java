@@ -3,7 +3,6 @@ package lyd.github.library;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.util.Log;
 
 /**
  * Created by shawn on 17/11/29.
